@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <RelativeLayout
+            android:id="@+id/phoneRL"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phone"
+                android:padding="8dp"
+                android:textSize="17sp"
+                android:textColor="#000"
+                android:id="@+id/phone"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <EditText
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/phoneContent"
+                android:background="@android:drawable/edit_text"
+                android:layout_alignParentTop="true"
+                android:inputType="phone"
+                android:layout_toRightOf="@id/phone" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/phoneContent"
+                android:text="@string/getCheckCode"
+                android:id="@+id/getCheckCodeButton"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkCodeRL"
+            android:layout_below="@id/phoneRL">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkCode"
+                android:padding="8dp"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:id="@+id/checkCode"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkCodeContent"
+                android:background="@android:drawable/edit_text"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/checkCode" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkCodeRL"
+            android:paddingLeft="8dp">
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/loginButton"
+                android:inputType="number"
+                android:text="@string/login"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
