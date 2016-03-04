@@ -1,5 +1,6 @@
 package com.jikexueyuan.secret.net;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.jikexueyuan.secret.common.Config;
@@ -15,12 +16,12 @@ import java.util.Map;
  * Created by 13058 on 2016/3/2.
  */
 public class UploadContacts {
-    public UploadContacts(String phoneNum,String token,String contacts, final SuccessCallback successCallback,final FailCallback failCallback){
+    public UploadContacts(Context context,String phoneNum,String token,String contacts, final SuccessCallback successCallback,final FailCallback failCallback){
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_MD5,phoneNum);
         params.put(Config.KEY_TOKEN,token);
         params.put(Config.KEY_CONTACTS,contacts);
-        new NetConnections(Config.SERVER_URL + Config.REQUET_URL_CONTACTS, HttpMethod.POST, new NetConnections.SuccessCallback() {
+        new NetConnections(context,Config.SERVER_URL + Config.REQUET_URL_CONTACTS, HttpMethod.POST, new NetConnections.SuccessCallback() {
             @Override
             public void onSuccess(String result) {
                 try {

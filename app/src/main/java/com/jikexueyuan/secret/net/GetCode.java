@@ -1,5 +1,6 @@
 package com.jikexueyuan.secret.net;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.jikexueyuan.secret.common.Config;
@@ -14,10 +15,10 @@ import java.util.Map;
  * Created by 13058 on 2016/3/2.
  */
 public class GetCode {
-    public GetCode(String phone,final SuccessCallback successCallback,final FailCallback failCallback){
+    public GetCode(Context context,String phone,final SuccessCallback successCallback,final FailCallback failCallback){
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_GET_CODE,phone);
-        new NetConnections(Config.SERVER_URL+Config.REQUET_URL_SEND_PASS,HttpMethod.POST,new NetConnections.SuccessCallback(){
+        new NetConnections(context,Config.SERVER_URL+Config.REQUET_URL_SEND_PASS,HttpMethod.POST,new NetConnections.SuccessCallback(){
             @Override
             public void onSuccess(String result) {
                 try {

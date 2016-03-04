@@ -1,5 +1,7 @@
 package com.jikexueyuan.secret.net;
 
+import android.content.Context;
+
 import com.jikexueyuan.secret.bean.Comment;
 import com.jikexueyuan.secret.bean.Message;
 import com.jikexueyuan.secret.common.Config;
@@ -17,14 +19,14 @@ import java.util.Map;
  * Created by 13058 on 2016/3/3.
  */
 public class GetComments {
-    public GetComments(String phoneNum, String token, int page, int perpage, String msgId,final SuccessCallback successCallback,final FailCallback failCallback) {
+    public GetComments(Context context,String phoneNum, String token, int page, int perpage, String msgId,final SuccessCallback successCallback,final FailCallback failCallback) {
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_MD5,phoneNum);
         params.put(Config.KEY_TOKEN,token);
         params.put(Config.KEY_PAGE,String.valueOf(page));
         params.put(Config.KEY_PERPAGE,String.valueOf(perpage));
         params.put(Config.KEY_MSGID,msgId);
-        new NetConnections(Config.SERVER_URL + Config.REQUET_URL_GET_COMMENTS, HttpMethod.POST, new NetConnections.SuccessCallback() {
+        new NetConnections(context,Config.SERVER_URL + Config.REQUET_URL_GET_COMMENTS, HttpMethod.POST, new NetConnections.SuccessCallback() {
             @Override
             public void onSuccess(String result) {
                 try {

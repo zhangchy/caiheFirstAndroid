@@ -18,7 +18,7 @@ public class Config {
     public static final int RESULT_STATUS_SUCCESS = 1;
     public static final int RESULT_STATUS_FAIL = 0;
     public static final int RESULT_STATUS_INVALID_TOKEN = 2;
-    public static final long REQUET_TIME = 10000l;
+    public static final long REQUET_TIME = 3000l;
 
     public static String KEY_PHONE_MD5 = "phone_md5";
     public static String KEY_CODE = "code";
@@ -37,6 +37,8 @@ public class Config {
     public static String REQUET_URL_TIMELINE="/android_timeline";
     public static String REQUET_URL_GET_COMMENTS = "/android_get_comment";
     public static String REQUET_URL_PUB_COMMENT = "/android_pub_comment";
+
+    public static String KEY_LANGUAGE = "language_choice";
     public static String getCachedToken(Context context){
         return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_TOKEN,null);
     }
@@ -51,9 +53,20 @@ public class Config {
         return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_PHONE,null);
     }
 
+
     public static void cachePhone(Context context,String phone){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_PHONE,phone);
         editor.commit();
+    }
+
+    public static void setLocalLanguage(Context context,String language){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_LANGUAGE,language);
+        editor.commit();
+    }
+
+    public static String getLocalLanguage(Context context){
+        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_LANGUAGE,null);
     }
 }

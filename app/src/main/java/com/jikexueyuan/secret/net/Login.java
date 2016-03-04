@@ -1,5 +1,7 @@
 package com.jikexueyuan.secret.net;
 
+import android.content.Context;
+
 import com.jikexueyuan.secret.common.Config;
 
 import org.json.JSONException;
@@ -12,11 +14,11 @@ import java.util.Map;
  * Created by 13058 on 2016/3/2.
  */
 public class Login {
-    public Login(String phoneMD5,String code, final SuccessCallback successCallback, final FailCallback failCallback){
+    public Login(Context context,String phoneMD5,String code, final SuccessCallback successCallback, final FailCallback failCallback){
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_MD5,phoneMD5);
         params.put(Config.KEY_CODE,code);
-        new NetConnections(Config.SERVER_URL+Config.REQUET_URL_LOGIN,HttpMethod.POST,new NetConnections.SuccessCallback(){
+        new NetConnections(context,Config.SERVER_URL+Config.REQUET_URL_LOGIN,HttpMethod.POST,new NetConnections.SuccessCallback(){
             @Override
             public void onSuccess(String result){
                 try{

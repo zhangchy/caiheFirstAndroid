@@ -37,8 +37,12 @@ public class TimeLineActivity extends ListActivity {
         setListAdapter(adapter);
         phoneNum = getIntent().getStringExtra(Config.KEY_PHONE);
         token = getIntent().getStringExtra(Config.KEY_TOKEN);
+        uploadContacts();
+    }
+
+    private void uploadContacts(){
         final ProgressDialog progressDialog = ProgressDialog.show(TimeLineActivity.this, getResources().getString(R.string.uploadContacts), getResources().getString(R.string.uploadContactsPleaseWait));
-        new UploadContacts(phoneNum, token, MyContacts.getContactsJSONString(TimeLineActivity.this), new UploadContacts.SuccessCallback() {
+        new UploadContacts(TimeLineActivity.this,phoneNum, token, MyContacts.getContactsJSONString(TimeLineActivity.this), new UploadContacts.SuccessCallback() {
             @Override
             public void onSuccess() {
                 progressDialog.dismiss();
@@ -78,7 +82,7 @@ public class TimeLineActivity extends ListActivity {
         String phoneNum = getIntent().getStringExtra(Config.KEY_PHONE);
         String token = getIntent().getStringExtra(Config.KEY_TOKEN);
         final ProgressDialog progressDialog = ProgressDialog.show(TimeLineActivity.this, getResources().getString(R.string.loadingMessage), getResources().getString(R.string.loadingMessagePleaseWait));
-        new TimeLine(phoneNum, token, page, perpage, new TimeLine.SuccessCallback() {
+        new TimeLine(TimeLineActivity.this,phoneNum, token, page, perpage, new TimeLine.SuccessCallback() {
             @Override
             public void onSuccess(List<Message> messages) {
                 progressDialog.dismiss();

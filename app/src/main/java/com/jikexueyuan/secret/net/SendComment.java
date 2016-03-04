@@ -1,5 +1,7 @@
 package com.jikexueyuan.secret.net;
 
+import android.content.Context;
+
 import com.jikexueyuan.secret.bean.Comment;
 import com.jikexueyuan.secret.common.Config;
 
@@ -16,13 +18,13 @@ import java.util.Map;
  * Created by 13058 on 2016/3/3.
  */
 public class SendComment {
-    public SendComment(String phoneNum, String token, final String content, String msgId,final SuccessCallback successCallback,final FailCallback failCallback) {
+    public SendComment(Context context,String phoneNum, String token, final String content, String msgId,final SuccessCallback successCallback,final FailCallback failCallback) {
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_MD5,phoneNum);
         params.put(Config.KEY_TOKEN,token);
         params.put(Config.KEY_MSGID,msgId);
         params.put(Config.KEY_COMMENT_CONTENT,content);
-        new NetConnections(Config.SERVER_URL + Config.REQUET_URL_PUB_COMMENT, HttpMethod.POST, new NetConnections.SuccessCallback() {
+        new NetConnections(context,Config.SERVER_URL + Config.REQUET_URL_PUB_COMMENT, HttpMethod.POST, new NetConnections.SuccessCallback() {
             @Override
             public void onSuccess(String result) {
                 try {

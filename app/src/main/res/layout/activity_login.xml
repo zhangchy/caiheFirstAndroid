@@ -70,6 +70,13 @@
                 android:id="@+id/loginButton"
                 android:inputType="number"
                 android:text="@string/login"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/languageChoice"
+                android:inputType="number"
+                android:text="@string/changeLanguage"/>
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

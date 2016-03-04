@@ -66,7 +66,7 @@ public class MessageActivity extends ListActivity {
                     return;
                 }
                 final ProgressDialog progressDialog = ProgressDialog.show(MessageActivity.this, getResources().getString(R.string.sendingComment), getResources().getString(R.string.sendingCommentPleaseWait));
-                new SendComment(phoneNum, token, etComment.getText().toString(), msgId, new SendComment.SuccessCallback() {
+                new SendComment(MessageActivity.this,phoneNum, token, etComment.getText().toString(), msgId, new SendComment.SuccessCallback() {
                     @Override
                     public void onSuccess(String commentContent) {
                         progressDialog.dismiss();
@@ -95,7 +95,7 @@ public class MessageActivity extends ListActivity {
 
     private void getComments(int page,int perpage){
         final ProgressDialog progressDialog = ProgressDialog.show(MessageActivity.this, getResources().getString(R.string.loadingComments), getResources().getString(R.string.loadingCommentsPleaseWait));
-        new GetComments(phoneNum, token, page, perpage, msgId, new GetComments.SuccessCallback() {
+        new GetComments(MessageActivity.this,phoneNum, token, page, perpage, msgId, new GetComments.SuccessCallback() {
             @Override
             public void onSuccess(List<Comment> comments) {
                 progressDialog.dismiss();
