@@ -81,8 +81,10 @@ public class MessageActivity extends ListActivity {
                     public void onFail(int errorCode) {
                         progressDialog.dismiss();
                         if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                            Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                            return;
+                            /*Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
+                            return;*/
+                            startActivity(new Intent(MessageActivity.this,LoginActivity.class));
+                            finish();
                         }
                         Toast.makeText(MessageActivity.this, R.string.sendCommentFail, Toast.LENGTH_LONG).show();
                     }
@@ -104,8 +106,10 @@ public class MessageActivity extends ListActivity {
             public void onFail(int errorCode) {
                 progressDialog.dismiss();
                 if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                    Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                    return;
+                    /*Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
+                    return;*/
+                    startActivity(new Intent(MessageActivity.this,LoginActivity.class));
+                    finish();
                 }
                 Toast.makeText(MessageActivity.this, R.string.getCommentFail, Toast.LENGTH_LONG).show();
             }

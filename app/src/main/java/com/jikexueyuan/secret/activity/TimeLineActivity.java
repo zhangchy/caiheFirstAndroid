@@ -90,8 +90,10 @@ public class TimeLineActivity extends ListActivity {
             public void onFail(int errorCode) {
                 progressDialog.dismiss();
                 if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                    Toast.makeText(TimeLineActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                    return;
+                    /*Toast.makeText(TimeLineActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
+                    return;*/
+                    startActivity(new Intent(TimeLineActivity.this,LoginActivity.class));
+                    finish();
                 }
                 Toast.makeText(TimeLineActivity.this, R.string.getMessagesFail, Toast.LENGTH_LONG).show();
             }
