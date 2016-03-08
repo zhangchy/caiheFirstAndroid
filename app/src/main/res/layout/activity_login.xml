@@ -61,22 +61,40 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/checkCodeRL"
             android:paddingLeft="8dp">
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/loginButton"
-                android:inputType="number"
                 android:text="@string/login"/>
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/languageChoice"
-                android:inputType="number"
-                android:text="@string/changeLanguage"/>
+                android:layout_below="@id/loginButton"
+                android:text="改变语言环境"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/showHtmlButton"
+                android:layout_below="@id/languageChoice"
+                android:text="加载html5页面"/>
+            <WebView
+                android:layout_width="fill_parent"
+                android:id="@+id/webView"
+                android:layout_below="@id/showHtmlButton"
+                android:layout_height="100dp">
+            <!--<ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/webView"
+                android:entries="@array/arr">
+            </ListView>-->
+
+            </WebView>
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

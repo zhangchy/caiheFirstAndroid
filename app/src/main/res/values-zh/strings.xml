@@ -35,5 +35,4 @@
     <string name="getMessagesFail">获取消息内容失败</string>
     <string name="loadingMessage">正在获取消息</string>
     <string name="loadingMessagePleaseWait">正在获取消息，请等待...</string>
-    <string name="changeLanguage">改变语言环境</string>
 </resources>

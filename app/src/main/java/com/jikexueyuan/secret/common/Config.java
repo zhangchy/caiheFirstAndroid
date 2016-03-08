@@ -3,6 +3,8 @@ package com.jikexueyuan.secret.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Locale;
+
 /**
  * Created by 13058 on 2016/2/29.
  */
@@ -67,6 +69,7 @@ public class Config {
     }
 
     public static String getLocalLanguage(Context context){
-        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_LANGUAGE,null);
+        String currentLanguage = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_LANGUAGE,null);
+        return currentLanguage == null? Locale.CHINESE.getLanguage():currentLanguage;
     }
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+        <meta name="viewport"
+              content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+        <meta content="telephone=no" name="format-detection"/>
+        <meta content="email=no" name="format-detection"/>
+        <meta name="apple-touch-fullscreen" content="yes"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+        <title data-layout-title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">凯撒旅游</title>
+    </head>
+
+    <body>
+        <section data-layout-fragment="content" data-th-remove="tag"></section>
+        <div class="ajaxLoading">
+
+        </div>
+        <script data-th-src="@{assets/js/base/require.js}"></script>
+        <script data-th-src="@{assets/js/base/config.js}"></script>
+        <script data-layout-fragment="postScript"></script>
+    </body>
+
+</html>

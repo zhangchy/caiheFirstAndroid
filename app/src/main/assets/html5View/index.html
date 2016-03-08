@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>商品详情</title>
+        <script type="text/javascript">
+            function show(json){
+                document.getElementById("test").innerHTML = json.key;
+            }
+        </script>
+    </head>
+    <body >
+        <section data-layout-fragment="content">
+            <header class="searchBar" id="product_header">
+                test
+            </header>
+            <article style="padding-top: 1.04rem" id="test">
+                <button onclick="javascript:htmlView.show();">click</button>
+            </article>
+        </section>
+    </body>
+</html>

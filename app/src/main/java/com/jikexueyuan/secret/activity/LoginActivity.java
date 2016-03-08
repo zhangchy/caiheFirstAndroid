@@ -5,22 +5,33 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jikexueyuan.secret.bean.User;
 import com.jikexueyuan.secret.common.Config;
 import com.jikexueyuan.secret.net.GetCode;
 import com.jikexueyuan.secret.net.Login;
-import com.jikexueyuan.secret.secret.MainActivity;
 import com.jikexueyuan.secret.secret.R;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -94,9 +105,11 @@ public class LoginActivity extends Activity{
                 }
             }
         });
+
+        addHtml5ButtonListener();
     }
 
-    private void changeLanguageButtonListener(Button languageChoiceButton){
+    private void changeLanguageButtonListener(final Button languageChoiceButton){
         languageChoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,9 +128,86 @@ public class LoginActivity extends Activity{
         }else{
             config.locale = Locale.CHINESE;
         }
-        Config.setLocalLanguage(LoginActivity.this,config.locale.getLanguage());
+        Config.setLocalLanguage(LoginActivity.this, config.locale.getLanguage());
         resources.updateConfiguration(config, dm);
         Intent sIntent = this.getIntent();
         this.startActivity(sIntent);
+    }
+    private WebView webView;
+    //加载html5页面
+    private void addHtml5ButtonListener(){
+        Button showHtmlButton = (Button)findViewById(R.id.showHtmlButton);
+        showHtmlButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webView = (WebView)findViewById(R.id.webView);
+                //允许webView中加载js
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.setWebViewClient(new WebViewClient());
+                webView.setWebChromeClient(new WebChromeClient());
+                webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+                webView.getSettings().setAllowFileAccess(true);// 设置允许访问文件数据
+                webView.loadUrl("file:///android_asset/html5View/index.html");
+                webView.addJavascriptInterface(new HtmlView(),"htmlView");
+            }
+        });
+    }
+
+
+    private final  class HtmlView{
+        @JavascriptInterface
+        public void show(){
+            List<User> users = loadUserInfo();
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("key",users);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String json = jsonObject.toString();
+            webView.loadUrl("javascript:show("+jsonObject+")");
+        }
+    }
+    private List<User> loadUserInfo(){
+        List<User> users = null;
+        XmlResourceParser xrp = getResources().getXml(R.xml.users);
+        try {
+            int event = xrp.getEventType();
+            User user = null;
+            while(event!=XmlResourceParser.END_DOCUMENT){
+                switch (event){
+                    case XmlResourceParser.START_DOCUMENT:
+                        users = new ArrayList<User>();
+                        break;
+                    case XmlResourceParser.START_TAG:
+                        String tagName = xrp.getName();
+                        if("user".equals(tagName)){
+                            user = new User();
+                        }else if (("name").equals(tagName)){
+                            String value = xrp.nextText();
+                            user.setName(value);
+                        }else if(("age").equals(tagName)){
+                            String value = xrp.nextText();
+                            user.setAge(value);
+                        }else if(("sex").equals(tagName)){
+                            String value = xrp.nextText();
+                            user.setSex(value);
+                        }
+                        break;
+                    case XmlResourceParser.END_TAG:
+                        if("user".equals(xrp.getName())){
+                            users.add(user);
+                            user = null;
+                        }
+                        break;
+                }
+                event = xrp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }
