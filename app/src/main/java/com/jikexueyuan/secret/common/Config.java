@@ -2,6 +2,7 @@ package com.jikexueyuan.secret.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Looper;
 
 import java.util.Locale;
 
@@ -32,6 +33,7 @@ public class Config {
     public static String KEY_COMMENT_CONTENT = "content";
     public static String KEY_MSG = "msg";
     public static String KEY_MSGID = "msgId";
+    public static String KEY_LOOPER = "looper";
 
     public static String REQUET_URL_SEND_PASS="/android_send_pass";
     public static String REQUET_URL_LOGIN="/android_login";
@@ -69,7 +71,18 @@ public class Config {
     }
 
     public static String getLocalLanguage(Context context){
-        String currentLanguage = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_LANGUAGE,null);
+        String currentLanguage = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_LANGUAGE, null);
         return currentLanguage == null? Locale.CHINESE.getLanguage():currentLanguage;
+    }
+
+    public static void setLooper(Context context,Boolean looper){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(KEY_LOOPER, looper);
+        editor.commit();
+    }
+
+    public static Boolean getLooper(Context context){
+        Boolean looper = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getBoolean(KEY_LOOPER, false);
+        return looper;
     }
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.jikexueyuan.secret.bean.Comment;
 import com.jikexueyuan.secret.bean.Message;
 import com.jikexueyuan.secret.common.Config;
+import com.jikexueyuan.secret.common.UIHandler;
 import com.jikexueyuan.secret.net.GetComments;
 import com.jikexueyuan.secret.net.SendComment;
 import com.jikexueyuan.secret.secret.R;
@@ -35,12 +36,16 @@ public class MessageActivity extends ListActivity {
     private TextView tvMessage;
     private MessageActivityAdapter adapter;
     private ListView lvComments;
+    public UIHandler uiHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_message);
         adapter = new MessageActivityAdapter(this);
         lvComments = (ListView)findViewById(R.id.select_dialog_listview);
+
+        uiHandler = new UIHandler(MessageActivity.this);
+
         setListAdapter(adapter);
         Intent intent = getIntent();
         msg = intent.getStringExtra(Config.KEY_MSG);
@@ -55,18 +60,24 @@ public class MessageActivity extends ListActivity {
         int perpage = 10;
 
         getComments(page,perpage);
+        sendComment();
 
+    }
+    private void sendComment(){
         Button btnSendComment = (Button)findViewById(R.id.btnSendComment);
         btnSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final EditText etComment = (EditText)findViewById(R.id.etComment);
                 if(TextUtils.isEmpty(etComment.getText().toString())){
-                    Toast.makeText(MessageActivity.this, R.string.commentCannotEmpty, Toast.LENGTH_LONG).show();
+                    android.os.Message message = uiHandler.obtainMessage();
+                    message.what = UIHandler.DISPLAY_UI_TOAST;
+                    message.obj = getString(R.string.commentCannotEmpty);
+                    uiHandler.sendMessage(message);
                     return;
                 }
                 final ProgressDialog progressDialog = ProgressDialog.show(MessageActivity.this, getResources().getString(R.string.sendingComment), getResources().getString(R.string.sendingCommentPleaseWait));
-                new SendComment(MessageActivity.this,phoneNum, token, etComment.getText().toString(), msgId, new SendComment.SuccessCallback() {
+                new SendComment(MessageActivity.this, phoneNum, token, etComment.getText().toString(), msgId, new SendComment.SuccessCallback() {
                     @Override
                     public void onSuccess(String commentContent) {
                         progressDialog.dismiss();
@@ -81,21 +92,30 @@ public class MessageActivity extends ListActivity {
                     public void onFail(int errorCode) {
                         progressDialog.dismiss();
                         if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                            /*Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                            return;*/
-                            startActivity(new Intent(MessageActivity.this,LoginActivity.class));
+                            startActivity(new Intent(MessageActivity.this, LoginActivity.class));
                             finish();
                         }
-                        Toast.makeText(MessageActivity.this, R.string.sendCommentFail, Toast.LENGTH_LONG).show();
+                        android.os.Message message = uiHandler.obtainMessage();
+                        message.what = UIHandler.DISPLAY_UI_TOAST;
+                        message.obj = getString(R.string.sendCommentFail);
+                        uiHandler.sendMessage(message);
+                    }
+                }, new SendComment.TimeOutCallback() {
+                    @Override
+                    public void onTimeOut() {
+                        progressDialog.dismiss();
+                        android.os.Message message = uiHandler.obtainMessage();
+                        message.what = UIHandler.DISPLAY_UI_TOAST;
+                        message.obj = getString(R.string.connectTimeOut);
+                        uiHandler.sendMessage(message);
                     }
                 });
             }
         });
     }
-
     private void getComments(int page,int perpage){
         final ProgressDialog progressDialog = ProgressDialog.show(MessageActivity.this, getResources().getString(R.string.loadingComments), getResources().getString(R.string.loadingCommentsPleaseWait));
-        new GetComments(MessageActivity.this,phoneNum, token, page, perpage, msgId, new GetComments.SuccessCallback() {
+        new GetComments(MessageActivity.this, phoneNum, token, page, perpage, msgId, new GetComments.SuccessCallback() {
             @Override
             public void onSuccess(List<Comment> comments) {
                 progressDialog.dismiss();
@@ -106,12 +126,22 @@ public class MessageActivity extends ListActivity {
             public void onFail(int errorCode) {
                 progressDialog.dismiss();
                 if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                    /*Toast.makeText(MessageActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                    return;*/
-                    startActivity(new Intent(MessageActivity.this,LoginActivity.class));
+                    startActivity(new Intent(MessageActivity.this, LoginActivity.class));
                     finish();
                 }
-                Toast.makeText(MessageActivity.this, R.string.getCommentFail, Toast.LENGTH_LONG).show();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.getCommentFail);
+                uiHandler.sendMessage(message);
+            }
+        }, new GetComments.TimeOutCallback() {
+            @Override
+            public void onTimeOut() {
+                progressDialog.dismiss();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.connectTimeOut);
+                uiHandler.sendMessage(message);
             }
         });
     }

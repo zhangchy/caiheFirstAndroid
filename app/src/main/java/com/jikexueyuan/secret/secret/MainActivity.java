@@ -1,9 +1,9 @@
 package com.jikexueyuan.secret.secret;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -13,15 +13,14 @@ import android.view.MenuItem;
 import com.jikexueyuan.secret.activity.LoginActivity;
 import com.jikexueyuan.secret.activity.TimeLineActivity;
 import com.jikexueyuan.secret.common.Config;
+import com.jikexueyuan.secret.common.UIHandler;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         String token = Config.getCachedToken(this);
         String phoneNum = Config.getCachedPhone(this);
         // startActivity(new Intent(this,TimeLineActivity.class));

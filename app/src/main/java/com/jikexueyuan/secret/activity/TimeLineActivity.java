@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.jikexueyuan.secret.bean.Message;
 import com.jikexueyuan.secret.common.Config;
+import com.jikexueyuan.secret.common.UIHandler;
 import com.jikexueyuan.secret.localdata.MyContacts;
 import com.jikexueyuan.secret.net.TimeLine;
 import com.jikexueyuan.secret.net.UploadContacts;
@@ -29,6 +30,7 @@ public class TimeLineActivity extends ListActivity {
     private TimeLineActivityAdapter adapter;
     private String phoneNum;
     private String token;
+    public UIHandler uiHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +39,20 @@ public class TimeLineActivity extends ListActivity {
         setListAdapter(adapter);
         phoneNum = getIntent().getStringExtra(Config.KEY_PHONE);
         token = getIntent().getStringExtra(Config.KEY_TOKEN);
+        uiHandler = new UIHandler(TimeLineActivity.this);
         uploadContacts();
     }
 
     private void uploadContacts(){
         final ProgressDialog progressDialog = ProgressDialog.show(TimeLineActivity.this, getResources().getString(R.string.uploadContacts), getResources().getString(R.string.uploadContactsPleaseWait));
-        new UploadContacts(TimeLineActivity.this,phoneNum, token, MyContacts.getContactsJSONString(TimeLineActivity.this), new UploadContacts.SuccessCallback() {
+        new UploadContacts(TimeLineActivity.this, phoneNum, token, MyContacts.getContactsJSONString(TimeLineActivity.this), new UploadContacts.SuccessCallback() {
             @Override
             public void onSuccess() {
                 progressDialog.dismiss();
-                Toast.makeText(TimeLineActivity.this, R.string.uploadContactsComplete, Toast.LENGTH_SHORT).show();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.uploadContactsComplete);
+                uiHandler.sendMessage(message);
                 loadMessages();
             }
         }, new UploadContacts.FailCallback() {
@@ -58,8 +64,20 @@ public class TimeLineActivity extends ListActivity {
                     return;
                 }
                 progressDialog.dismiss();
-                Toast.makeText(TimeLineActivity.this, R.string.uploadContactsFail, Toast.LENGTH_SHORT).show();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj =getString( R.string.uploadContactsFail);
+                uiHandler.sendMessage(message);
                 loadMessages();
+            }
+        }, new UploadContacts.TimeOutCallback() {
+            @Override
+            public void onTimeOut() {
+                progressDialog.dismiss();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.connectTimeOut);
+                uiHandler.sendMessage(message);
             }
         });
     }
@@ -72,7 +90,7 @@ public class TimeLineActivity extends ListActivity {
         intent.putExtra(Config.KEY_MSG,message.getMsg());
         intent.putExtra(Config.KEY_MSGID,message.getMsgId());
         intent.putExtra(Config.KEY_TOKEN,token);
-        intent.putExtra(Config.KEY_PHONE,phoneNum);
+        intent.putExtra(Config.KEY_PHONE, phoneNum);
         startActivity(intent);
     }
 
@@ -82,11 +100,10 @@ public class TimeLineActivity extends ListActivity {
         String phoneNum = getIntent().getStringExtra(Config.KEY_PHONE);
         String token = getIntent().getStringExtra(Config.KEY_TOKEN);
         final ProgressDialog progressDialog = ProgressDialog.show(TimeLineActivity.this, getResources().getString(R.string.loadingMessage), getResources().getString(R.string.loadingMessagePleaseWait));
-        new TimeLine(TimeLineActivity.this,phoneNum, token, page, perpage, new TimeLine.SuccessCallback() {
+        new TimeLine(TimeLineActivity.this, phoneNum, token, page, perpage, new TimeLine.SuccessCallback() {
             @Override
             public void onSuccess(List<Message> messages) {
                 progressDialog.dismiss();
-                Toast.makeText(TimeLineActivity.this, messages + "", Toast.LENGTH_LONG).show();
                 adapter.addAll(messages);
             }
         }, new TimeLine.FailCallback() {
@@ -94,12 +111,22 @@ public class TimeLineActivity extends ListActivity {
             public void onFail(int errorCode) {
                 progressDialog.dismiss();
                 if (errorCode == Config.RESULT_STATUS_INVALID_TOKEN) {
-                    /*Toast.makeText(TimeLineActivity.this, R.string.invalidToken, Toast.LENGTH_LONG).show();
-                    return;*/
-                    startActivity(new Intent(TimeLineActivity.this,LoginActivity.class));
+                    startActivity(new Intent(TimeLineActivity.this, LoginActivity.class));
                     finish();
                 }
-                Toast.makeText(TimeLineActivity.this, R.string.getMessagesFail, Toast.LENGTH_LONG).show();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.getMessagesFail);
+                uiHandler.sendMessage(message);
+            }
+        }, new TimeLine.TimeOutCallback() {
+            @Override
+            public void onTimeOut() {
+                progressDialog.dismiss();
+                android.os.Message message = uiHandler.obtainMessage();
+                message.what = UIHandler.DISPLAY_UI_TOAST;
+                message.obj = getString(R.string.connectTimeOut);
+                uiHandler.sendMessage(message);
             }
         });
     }

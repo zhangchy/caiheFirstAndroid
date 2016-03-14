@@ -1,8 +1,10 @@
 package com.jikexueyuan.secret.net;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.jikexueyuan.secret.common.Config;
+import com.jikexueyuan.secret.common.UIHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +16,7 @@ import java.util.Map;
  * Created by 13058 on 2016/3/2.
  */
 public class Login {
-    public Login(Context context,String phoneMD5,String code, final SuccessCallback successCallback, final FailCallback failCallback){
+    public Login(Context context,String phoneMD5,String code, final SuccessCallback successCallback, final FailCallback failCallback,final TimeOutCallback timeOutCallback){
         Map<String,String> params = new HashMap<String,String>();
         params.put(Config.KEY_PHONE_MD5,phoneMD5);
         params.put(Config.KEY_CODE,code);
@@ -49,6 +51,13 @@ public class Login {
                     failCallback.onFail();
                 }
             }
+        },new NetConnections.TimeOutCallback(){
+            @Override
+            public void onTimeOut(){
+                if(timeOutCallback!=null){
+                    timeOutCallback.onTimeOut();
+                }
+            }
         },params);
     }
 
@@ -57,5 +66,8 @@ public class Login {
     }
     public static interface FailCallback{
         public void onFail();
+    }
+    public static interface TimeOutCallback{
+        void onTimeOut();
     }
 }

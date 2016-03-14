@@ -35,5 +35,9 @@
     <string name="getMessagesFail">get messsages fail</string>
     <string name="loadingMessage">loading messages</string>
     <string name="loadingMessagePleaseWait">loading messages,please wait...</string>
+    <string name="loadHtml5View">load h5 view</string>
+    <string name="loadAnimation">load animation</string>
+    <string name="removeLoadAnimation">remove animation</string>
+    <string name="connectTimeOut">connect time out</string>
 </resources>
 

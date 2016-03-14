@@ -1,11 +1,14 @@
 package com.jikexueyuan.secret.net;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
-import com.jikexueyuan.secret.activity.LoginActivity;
 import com.jikexueyuan.secret.common.Config;
+import com.jikexueyuan.secret.common.UIHandler;
+import com.jikexueyuan.secret.secret.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,7 +28,7 @@ import java.util.concurrent.TimeoutException;
  * Created by 13058 on 2016/2/29.
  */
 public class NetConnections {
-    public NetConnections(final Context context,final String url, final HttpMethod method, final SuccessCallback successCallback, final FailCallback failCallback, final Map<String, String> kvs) {
+    public NetConnections(final Context context,final String url, final HttpMethod method, final SuccessCallback successCallback, final FailCallback failCallback,final TimeOutCallback timeOutCallback, final Map<String, String> kvs) {
         //新建异步类
         final AsyncTask<Void, Void, String> asyncTask = new AsyncTask<Void, Void, String>() {
             @Override
@@ -91,8 +94,9 @@ public class NetConnections {
                 }catch(ExecutionException e){
 
                 }catch(TimeoutException e){ //请求超时处理
-                    context.startActivity(new Intent(context, LoginActivity.class));
-                   // e.printStackTrace();
+                    if(timeOutCallback!=null){
+                        timeOutCallback.onTimeOut();
+                    }
                 }
             }
         }.start();
@@ -104,5 +108,9 @@ public class NetConnections {
 
     public static interface FailCallback {
         void onFail();
+    }
+
+    public static interface TimeOutCallback{
+        void onTimeOut();
     }
 }
